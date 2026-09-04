@@ -68,7 +68,7 @@ jobs:
       - name: 打包 .app 为 zip
         run: |
           cd src-tauri/target/universal-apple-darwin/release/bundle/macos
-          zip -r ../../cherimoya-ssh_macos.zip *.app
+          zip -r ../cherimoya-ssh_macos.zip *.app
 
       - name: 发布到 Release
         uses: softprops/action-gh-release@v2

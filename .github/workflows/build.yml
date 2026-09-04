@@ -53,6 +53,9 @@ jobs:
       - name: 安装前端依赖
         run: npm install
 
+      - name: 添加 x86_64 macOS 编译目标
+        run: rustup target add x86_64-apple-darwin
+
       - name: 构建 Tauri 应用 (macOS)
         uses: tauri-apps/tauri-action@v0
         env:

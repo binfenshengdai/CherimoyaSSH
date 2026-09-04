@@ -68,7 +68,7 @@ src-tauri/
 - [ ] **步骤 1：安装前端依赖**
 
 ```bash
-cd E:\webprojects\cherimoya-tauri
+cd E:\webprojects\cherimoya-ssh
 npm install @tauri-apps/plugin-fs @xterm/xterm @xterm/addon-fit
 ```
 

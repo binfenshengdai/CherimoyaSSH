@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    cherimoya_tauri_lib::run()
+    cherimoya_ssh_lib::run()
 }

@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "cherimoya-tauri",
+  "productName": "cherimoya-ssh",
   "version": "0.1.0",
-  "identifier": "com.sundae.cherimoya-tauri",
+  "identifier": "com.sundae.cherimoya-ssh",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",

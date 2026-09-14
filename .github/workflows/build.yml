@@ -65,14 +65,14 @@ jobs:
         with:
           args: --target universal-apple-darwin
 
-      - name: 打包 .app 为 zip
+      - name: 重命名 .app.tar.gz 为通用压缩包
         run: |
           cd src-tauri/target/universal-apple-darwin/release/bundle/macos
-          zip -r ../cherimoya-ssh_macos.zip *.app
+          cp cherimoya-ssh.app.tar.gz ../cherimoya-ssh_macos.tar.gz
 
       - name: 发布到 Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
-            src-tauri/target/universal-apple-darwin/release/bundle/cherimoya-ssh_macos.zip
+            src-tauri/target/universal-apple-darwin/release/bundle/cherimoya-ssh_macos.tar.gz

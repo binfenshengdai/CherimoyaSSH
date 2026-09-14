@@ -17,12 +17,53 @@
 </p>
 
 ---
-
 ## 📖 项目介绍
 
 Cherimoya SSH 是一款基于 **Tauri v2** + **Vue 3** + **Rust** 构建的跨平台桌面 SSH 客户端。后端采用 Rust 生态的高性能 SSH 库 [russh](https://crates.io/crates/russh)，前端使用 [xterm.js](https://xtermjs.org/) 渲染终端界面，兼具原生应用性能与现代前端开发体验。
 
 项目名称来源于热带水果「释迦果」（Cherimoya），寓意甜蜜、高效的 SSH 连接体验 🍈。
+
+---
+## 📸 功能截图展示
+
+<p align="center">
+  <img src="picture/添加主机.png" alt="添加主机" width="80%" />
+  <br/><em>添加主机</em>
+</p>
+
+<p align="center">
+  <img src="picture/编辑主机.png" alt="编辑主机" width="80%" />
+  <br/><em>编辑主机</em>
+</p>
+
+<p align="center">
+  <img src="picture/删除主机.png" alt="删除主机" width="80%" />
+  <br/><em>删除主机</em>
+</p>
+
+<p align="center">
+  <img src="picture/连接主机.png" alt="连接主机" width="80%" />
+  <br/><em>连接主机</em>
+</p>
+
+<p align="center">
+  <img src="picture/sftp连接.png" alt="SFTP 连接" width="80%" />
+  <br/><em>SFTP 文件管理</em>
+</p>
+
+<p align="center">
+  <img src="picture/拖拽文件上传.png" alt="拖拽文件上传" width="80%" />
+  <br/><em>拖拽文件上传</em>
+</p>
+
+<p align="center">
+  <img src="picture/文件下载进度条.png" alt="文件下载进度条" width="80%" />
+  <br/><em>文件下载进度</em>
+</p>
+
+---
+
+
 
 ## ✨ 核心功能
 

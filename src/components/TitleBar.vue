@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useNotifications } from "../composables/useNotifications";
+import { useDialog } from "../composables/useDialog";
 
+const { info } = useNotifications();
+const { showAbout } = useDialog();
 const isMaximized = ref(false);
+const moreMenuOpen = ref(false);
 const appWindow = getCurrentWindow();
 
 async function toggleMaximize() {
@@ -20,6 +25,29 @@ async function close() {
 
 async function updateMaximized() {
   isMaximized.value = await appWindow.isMaximized();
+}
+
+function toggleMoreMenu() {
+  moreMenuOpen.value = !moreMenuOpen.value;
+}
+
+function closeMoreMenu() {
+  moreMenuOpen.value = false;
+}
+
+function onSettings() {
+  closeMoreMenu();
+  info("设置功能开发中");
+}
+
+function onUpgrade() {
+  closeMoreMenu();
+  info("升级功能开发中");
+}
+
+function onAbout() {
+  closeMoreMenu();
+  showAbout();
 }
 
 let unlisten: (() => void) | null = null;
@@ -43,6 +71,25 @@ onBeforeUnmount(() => {
       <span class="app-title" data-tauri-drag-region>Cherimoya SSH</span>
     </div>
     <div class="window-controls">
+      <div class="more-menu-wrap">
+        <button
+          class="window-btn more"
+          @click="toggleMoreMenu"
+          title="更多"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16">
+            <circle cx="3" cy="8" r="1.2" fill="currentColor" />
+            <circle cx="8" cy="8" r="1.2" fill="currentColor" />
+            <circle cx="13" cy="8" r="1.2" fill="currentColor" />
+          </svg>
+        </button>
+        <div v-if="moreMenuOpen" class="more-menu-overlay" @click="closeMoreMenu"></div>
+        <div v-if="moreMenuOpen" class="more-menu">
+          <div class="more-menu-item" @click="onSettings">设置</div>
+          <div class="more-menu-item" @click="onUpgrade">升级</div>
+          <div class="more-menu-item" @click="onAbout">关于</div>
+        </div>
+      </div>
       <button
         class="window-btn minimize"
         @click="minimize"
@@ -139,5 +186,41 @@ onBeforeUnmount(() => {
 
 .window-btn svg {
   display: block;
+}
+
+.more-menu-wrap {
+  position: relative;
+  display: flex;
+  height: 100%;
+}
+
+.more-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.more-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 120px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+}
+
+.more-menu-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.more-menu-item:hover {
+  background: var(--bg-tertiary);
 }
 </style>

@@ -20,6 +20,7 @@ export interface PromptOptions {
 // 模块级单例状态（与 useNotifications 模式一致）
 const activeConfirm = ref<ConfirmOptions | null>(null);
 const activePrompt = ref<PromptOptions | null>(null);
+const activeAbout = ref(false);
 let confirmResolver: ((value: boolean) => void) | null = null;
 let promptResolver: ((value: string | null) => void) | null = null;
 
@@ -39,6 +40,24 @@ export function useDialog() {
     return new Promise((resolve) => {
       confirmResolver = resolve;
     });
+  }
+
+  function showAbout() {
+    if (promptResolver) {
+      promptResolver(null);
+      promptResolver = null;
+    }
+    if (confirmResolver) {
+      confirmResolver(false);
+      confirmResolver = null;
+    }
+    activeConfirm.value = null;
+    activePrompt.value = null;
+    activeAbout.value = true;
+  }
+
+  function closeAbout() {
+    activeAbout.value = false;
   }
 
   function showPrompt(options: PromptOptions): Promise<string | null> {
@@ -74,5 +93,5 @@ export function useDialog() {
     }
   }
 
-  return { activeConfirm, activePrompt, showConfirm, showPrompt, resolveConfirm, resolvePrompt };
+  return { activeConfirm, activePrompt, activeAbout, showConfirm, showPrompt, showAbout, closeAbout, resolveConfirm, resolvePrompt };
 }

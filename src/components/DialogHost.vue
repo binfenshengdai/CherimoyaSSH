@@ -2,8 +2,9 @@
 import { useDialog } from "../composables/useDialog";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import PromptDialog from "./PromptDialog.vue";
+import AboutDialog from "./AboutDialog.vue";
 
-const { activeConfirm, activePrompt, resolveConfirm, resolvePrompt } = useDialog();
+const { activeConfirm, activePrompt, activeAbout, resolveConfirm, resolvePrompt, closeAbout } = useDialog();
 </script>
 
 <template>
@@ -19,4 +20,5 @@ const { activeConfirm, activePrompt, resolveConfirm, resolvePrompt } = useDialog
     @confirm="resolvePrompt($event)"
     @cancel="resolvePrompt(null)"
   />
+  <AboutDialog v-if="activeAbout" @close="closeAbout" />
 </template>

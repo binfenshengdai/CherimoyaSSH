@@ -67,4 +67,4 @@ cd src-tauri && cargo tauri dev # 从 Rust 侧运行 Tauri 应用
 - 前端 ID 生成方式：`Date.now().toString(36) + Math.random().toString(36).slice(2, 8)`（非 UUID）；Rust 侧使用 `uuid` v4
 - 注释与 UI 字符串使用中文
 - 代码的commit和push需要和我确认，不能擅自提交
-- 不需要读target下的代码
+- 不需要读E:\webprojects\cherimoya-ssh\src-tauri\target下的文件代码

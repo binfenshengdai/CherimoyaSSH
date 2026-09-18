@@ -3,9 +3,11 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useNotifications } from "../composables/useNotifications";
 import { useDialog } from "../composables/useDialog";
+import { useUpdater } from "../composables/useUpdater";
 
-const { info } = useNotifications();
-const { showAbout } = useDialog();
+const { info, error } = useNotifications();
+const { showAbout, showConfirm } = useDialog();
+const updater = useUpdater();
 const isMaximized = ref(false);
 const moreMenuOpen = ref(false);
 const appWindow = getCurrentWindow();
@@ -40,9 +42,24 @@ function onSettings() {
   info("设置功能开发中");
 }
 
-function onUpgrade() {
+async function onUpgrade() {
   closeMoreMenu();
-  info("升级功能开发中");
+  try {
+    const update = await updater.checkUpdate();
+    if (!update) {
+      info("已是最新版本");
+      return;
+    }
+    const confirmed = await showConfirm({
+      title: "发现新版本",
+      message: `检测到新版本 v${update.version}，是否下载并安装？`,
+      confirmText: "下载并安装",
+    });
+    if (!confirmed) return;
+    await updater.downloadAndInstall(update);
+  } catch (e) {
+    error("检查更新失败：" + (e instanceof Error ? e.message : String(e)));
+  }
 }
 
 function onAbout() {

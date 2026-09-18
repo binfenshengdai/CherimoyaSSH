@@ -29,15 +29,32 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
           args: --target x86_64-pc-windows-msvc
+
+      - name: 生成更新清单 (Windows)
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          BUNDLE="src-tauri/target/x86_64-pc-windows-msvc/release/bundle"
+          EXE=$(find "$BUNDLE" -name "*_x64-setup.exe" | head -1)
+          node scripts/generate-updater-manifest.mjs \
+            --os windows \
+            --version "$VERSION" \
+            --release-url "https://github.com/binfenshengdai/CherimoyaSSH/releases/download/${GITHUB_REF_NAME}" \
+            --installer-name "$(basename "$EXE")" \
+            --sig "${EXE}.sig" \
+            --out latest-windows.json
 
       - name: 发布到 Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
-            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis*/*.exe
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/**/*.sig
+            latest-windows.json
 
   build-macos:
     runs-on: macos-latest
@@ -62,6 +79,7 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
           args: --target universal-apple-darwin
 
@@ -70,9 +88,25 @@ jobs:
           cd src-tauri/target/universal-apple-darwin/release/bundle/macos
           cp cherimoya-ssh.app.tar.gz ../cherimoya-ssh_macos.tar.gz
 
+      - name: 生成更新清单 (macOS)
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          TARBALL="src-tauri/target/universal-apple-darwin/release/bundle/macos/cherimoya-ssh.app.tar.gz"
+          node scripts/generate-updater-manifest.mjs \
+            --os darwin \
+            --version "$VERSION" \
+            --release-url "https://github.com/binfenshengdai/CherimoyaSSH/releases/download/${GITHUB_REF_NAME}" \
+            --installer-name "cherimoya-ssh.app.tar.gz" \
+            --sig "${TARBALL}.sig" \
+            --out latest-darwin.json
+
       - name: 发布到 Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
             src-tauri/target/universal-apple-darwin/release/bundle/cherimoya-ssh_macos.tar.gz
+            src-tauri/target/universal-apple-darwin/release/bundle/macos/cherimoya-ssh.app.tar.gz
+            src-tauri/target/universal-apple-darwin/release/bundle/macos/*.sig
+            latest-darwin.json

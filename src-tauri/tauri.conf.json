@@ -31,6 +31,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "createUpdaterArtifacts": true,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -38,5 +39,16 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU5OUMyRDUyMDU1RjY2REQKUldUZFpsOEZVaTJjV2JhR3pTNWpNMFpXaytMUnZ5bHZWdU1FQW9weFlBT3VhR0FxbHhVNnFtUXAK",
+      "endpoints": [
+        "https://github.com/binfenshengdai/CherimoyaSSH/releases/latest/download/latest-{{target}}.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

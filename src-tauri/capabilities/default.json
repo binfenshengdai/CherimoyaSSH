@@ -11,6 +11,8 @@
     "os:default",
     "fs:default",
     "dialog:default",
+    "updater:default",
+    "process:allow-restart",
     "fs:allow-appdata-read-recursive",
     "fs:allow-appdata-write-recursive",
     "core:window:allow-minimize",

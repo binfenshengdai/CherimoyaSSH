@@ -42,7 +42,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU5OUMyRDUyMDU1RjY2REQKUldUZFpsOEZVaTJjV2JhR3pTNWpNMFpXaytMUnZ5bHZWdU1FQW9weFlBT3VhR0FxbHhVNnFtUXAK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ5MTdENEJFRTcwRkQyOTUKUldTVjBnL252dFFYU2J1M3R2Y0V3OGJMY2UxbmtXalFiUkZwVFhPaWYrVmZGMzNtRnhSd3Y2ZWUK",
       "endpoints": [
         "https://github.com/binfenshengdai/CherimoyaSSH/releases/latest/download/latest-{{target}}.json"
       ],

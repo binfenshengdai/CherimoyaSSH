@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useTabs } from "../composables/useTabs";
 
 const emit = defineEmits<{
   closeConnection: [connectionId: string];
+  duplicateTab: [tabId: string];
 }>();
 
 const { tabs, activeTabId, setActiveTab, closeTab, renameTab, reorderTab } = useTabs();
@@ -27,6 +28,17 @@ function onContextMenu(tabId: string, event: MouseEvent) {
 }
 
 function closeContextMenu() {
+  contextMenu.value = null;
+}
+
+/** 菜单当前指向的标签页，用于按 kind 条件渲染菜单项 */
+const contextMenuTab = computed(
+  () => tabs.value.find((t) => t.id === contextMenu.value?.tabId) ?? null
+);
+
+function menuDuplicate() {
+  if (!contextMenu.value) return;
+  emit("duplicateTab", contextMenu.value.tabId);
   contextMenu.value = null;
 }
 
@@ -142,6 +154,11 @@ function onMouseUp() {
       @contextmenu.prevent="closeContextMenu"
     >
       <div class="tab-context-menu" :style="{ left: contextMenu.x + 'px', top: contextMenu.y + 'px' }">
+        <div
+          v-if="contextMenuTab?.kind === 'terminal'"
+          class="context-menu-item"
+          @click="menuDuplicate"
+        >复制</div>
         <div class="context-menu-item" @click="startRename">重命名</div>
         <div class="context-menu-item danger" @click="menuClose">关闭</div>
       </div>

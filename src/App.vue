@@ -8,22 +8,18 @@ import DialogHost from "./components/DialogHost.vue";
 import TitleBar from "./components/TitleBar.vue";
 import NotificationHost from "./components/NotificationHost.vue";
 import { useTabs } from "./composables/useTabs";
+import { useHosts } from "./composables/useHosts";
 import { useConnections } from "./composables/useConnections";
 import { useNotifications } from "./composables/useNotifications";
-import type { Host } from "./types/ssh";
+import type { Host, Tab } from "./types/ssh";
 
-const { tabs, activeTabId, openTab, updateConnectionId } = useTabs();
+const { tabs, activeTabId, openTab, updateConnectionId, duplicateTab } = useTabs();
+const { hosts } = useHosts();
 const { connect, disconnect } = useConnections();
 const { success, error } = useNotifications();
 
-async function handleConnect(host: Host) {
-  // 先打开标签页，显示"正在连接"
-  const tab = openTab({
-    hostId: host.id,
-    title: `${host.name} (${host.username}@${host.host})`,
-    connectionId: "pending",
-  });
-
+/** 向已创建的标签页发起连接，成功后回填真实 connectionId。失败时保留标签页并通知 */
+async function connectInto(tab: Tab, host: Host) {
   try {
     const connectionId = await connect({
       host: host.host,
@@ -40,10 +36,33 @@ async function handleConnect(host: Host) {
   }
 }
 
+async function handleConnect(host: Host) {
+  // 先打开标签页，显示"正在连接"
+  const tab = openTab({
+    hostId: host.id,
+    title: `${host.name} (${host.username}@${host.host})`,
+    connectionId: "pending",
+  });
+  await connectInto(tab, host);
+}
+
+async function handleDuplicateTab(tabId: string) {
+  const src = tabs.value.find((t) => t.id === tabId);
+  if (!src) return;
+
+  const host = hosts.value.find((h) => h.id === src.hostId);
+  if (!host) {
+    error("该主机已被删除，无法复制");
+    return;
+  }
+
+  const copy = duplicateTab(tabId);
+  if (copy) await connectInto(copy, host);
+}
+
 function handleCloseConnection(connectionId: string) {
   disconnect(connectionId);
 }
-
 </script>
 
 <template>
@@ -53,7 +72,10 @@ function handleCloseConnection(connectionId: string) {
       <Sidebar @connect="handleConnect" />
 
       <main class="main-area">
-        <TabBar @close-connection="handleCloseConnection" />
+        <TabBar
+          @close-connection="handleCloseConnection"
+          @duplicate-tab="handleDuplicateTab"
+        />
 
         <div class="terminal-area">
           <template v-for="tab in tabs" :key="tab.id">

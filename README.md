@@ -1,7 +1,7 @@
 # Cherimoya SSH
 
 <p align="center">
-  <img src="public/cherimoya.png" alt="Cherimoya SSH" width="128" height="128" />
+  <img src="public/app-icon.png" alt="Cherimoya SSH" width="128" height="128" />
 </p>
 
 <p align="center">

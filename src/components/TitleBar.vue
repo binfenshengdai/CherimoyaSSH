@@ -44,22 +44,28 @@ function onSettings() {
 
 async function onUpgrade() {
   closeMoreMenu();
+
+  let update;
   try {
-    const update = await updater.checkUpdate();
-    if (!update) {
-      info("已是最新版本");
-      return;
-    }
-    const confirmed = await showConfirm({
-      title: "发现新版本",
-      message: `检测到新版本 v${update.version}，是否下载并安装？`,
-      confirmText: "下载并安装",
-    });
-    if (!confirmed) return;
-    await updater.downloadAndInstall(update);
+    update = await updater.checkUpdate();
   } catch (e) {
     error("检查更新失败：" + (e instanceof Error ? e.message : String(e)));
+    return;
   }
+  if (!update) {
+    info("已是最新版本");
+    return;
+  }
+
+  const confirmed = await showConfirm({
+    title: "发现新版本",
+    message: `检测到新版本 v${update.version}，是否下载并安装？`,
+    confirmText: "下载并安装",
+  });
+  if (!confirmed) return;
+
+  // 下载/安装进度与失败原因由 UpgradeProgressHost 进度面板展示
+  await updater.downloadAndInstall(update);
 }
 
 function onAbout() {

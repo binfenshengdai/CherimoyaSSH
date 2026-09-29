@@ -69,11 +69,8 @@ function getProgress(item: { uploadedBytes: number; totalBytes: number }): numbe
 </template>
 
 <style scoped>
+/* 定位由 App.vue 的 .bottom-right-host 容器负责，便于与更新进度面板堆叠 */
 .sftp-progress-host {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  z-index: 9998;
   display: flex;
   flex-direction: column;
   gap: 8px;

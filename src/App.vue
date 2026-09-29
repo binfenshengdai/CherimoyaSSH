@@ -4,6 +4,7 @@ import TabBar from "./components/TabBar.vue";
 import TerminalPane from "./components/TerminalPane.vue";
 import SftpPane from "./components/SftpPane.vue";
 import SftpProgressHost from "./components/SftpProgressHost.vue";
+import UpgradeProgressHost from "./components/UpgradeProgressHost.vue";
 import DialogHost from "./components/DialogHost.vue";
 import TitleBar from "./components/TitleBar.vue";
 import NotificationHost from "./components/NotificationHost.vue";
@@ -103,7 +104,10 @@ function handleCloseConnection(connectionId: string) {
       </main>
     </div>
     <NotificationHost />
-    <SftpProgressHost />
+    <div class="bottom-right-host">
+      <SftpProgressHost />
+      <UpgradeProgressHost />
+    </div>
     <DialogHost />
   </div>
 </template>
@@ -155,5 +159,17 @@ function handleCloseConnection(connectionId: string) {
 }
 .empty-content p {
   font-size: 13px;
+}
+
+/* 右下角进度面板堆叠容器（SFTP 上传 / 应用更新） */
+.bottom-right-host {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
 }
 </style>

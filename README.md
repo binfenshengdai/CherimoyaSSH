@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue" alt="platform" />
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue" alt="platform" />
   <img src="https://img.shields.io/badge/framework-Tauri%20v2-FFC131?logo=tauri" alt="tauri" />
   <img src="https://img.shields.io/badge/frontend-Vue%203-4FC08D?logo=vue.js" alt="vue" />
   <img src="https://img.shields.io/badge/backend-Rust%20%7C%20russh-DEA584?logo=rust" alt="rust" />
@@ -91,9 +91,9 @@ Cherimoya SSH 是一款基于 **Tauri v2** + **Vue 3** + **Rust** 构建的跨�
 
 - [Node.js](https://nodejs.org/) >= 18
 - [Rust](https://www.rust-lang.org/) (stable)
-- 系统级依赖（Windows 通常无需额外安装）：
+- 系统级依赖：
+  - Windows：通常无需额外安装
   - macOS：需安装 Xcode Command Line Tools
-  - Linux：需安装 `libwebkit2gtk`、`libgtk-3` 等依赖，详见 [Tauri 文档](https://v2.tauri.app/start/prerequisites/)
 
 ### 开发模式
 

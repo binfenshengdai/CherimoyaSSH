@@ -18,7 +18,7 @@ onMounted(async () => {
 });
 
 async function handleOpenWebsite() {
-  await openUrl("https://github.com/binfenshengdai/CherimoyaSSH");
+  await openUrl("https://binfenshengdai.github.io/cherimoya-ssh.html");
 }
 </script>
 
@@ -38,7 +38,7 @@ async function handleOpenWebsite() {
         <div class="about-version">版本 v{{ version }}</div>
         <div class="about-author">作者：sundae</div>
         <a class="about-website" href="#" @click.prevent="handleOpenWebsite">
-          官网：https://github.com/binfenshengdai/CherimoyaSSH
+          官网：https://binfenshengdai.github.io/cherimoya-ssh.html
         </a>
       </div>
       <div class="modal-footer">

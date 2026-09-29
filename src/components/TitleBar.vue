@@ -85,6 +85,7 @@ onBeforeUnmount(() => {
 <template>
   <header class="title-bar" data-tauri-drag-region>
     <div class="title-bar-drag" data-tauri-drag-region>
+      <img class="app-icon" src="/app-icon.png" alt="" data-tauri-drag-region />
       <span class="app-title" data-tauri-drag-region>Cherimoya SSH</span>
     </div>
     <div class="window-controls">
@@ -163,6 +164,14 @@ onBeforeUnmount(() => {
   align-items: center;
   padding-left: 12px;
   -webkit-app-region: drag;
+}
+
+.app-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  flex-shrink: 0;
 }
 
 .app-title {

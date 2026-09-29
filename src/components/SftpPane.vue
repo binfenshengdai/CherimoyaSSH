@@ -115,6 +115,13 @@ function closeContextMenu() {
 async function handleDelete() {
   if (!contextMenu.value) return;
   const file = contextMenu.value.file;
+  // 目录删除暂不支持：后端走的是 remove_file，服务端对目录的处理不一致
+  // （多数报错，少数会删掉空目录），因此在调用前直接拦截
+  if (file.is_dir) {
+    error("暂不支持删除目录");
+    contextMenu.value = null;
+    return;
+  }
   const confirmed = await showConfirm({
     title: "删除确认",
     message: `确定删除「${file.name}」？`,

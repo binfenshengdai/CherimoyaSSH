@@ -320,6 +320,7 @@ function formatTime(ts: number): string {
     <!-- 文件列表 -->
     <div class="sftp-file-list">
       <div v-if="loading" class="sftp-loading">加载中...</div>
+      <div v-else-if="files.length === 0" class="sftp-empty">目录为空</div>
       <div
         v-else
         v-for="file in files"
@@ -420,10 +421,12 @@ function formatTime(ts: number): string {
   overflow-y: auto;
   padding: 4px 0;
 }
-.sftp-loading {
+.sftp-loading,
+.sftp-empty {
   padding: 20px;
   text-align: center;
   color: var(--text-secondary);
+  font-size: 12px;
 }
 
 .sftp-file-item {

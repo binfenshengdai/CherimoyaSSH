@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getVersion } from "@tauri-apps/api/app";
 import { useNotifications } from "../composables/useNotifications";
 import { useDialog } from "../composables/useDialog";
 import { useUpdater } from "../composables/useUpdater";
 
-const { info, error } = useNotifications();
+const { info } = useNotifications();
 const { showAbout, showConfirm } = useDialog();
 const updater = useUpdater();
 const isMaximized = ref(false);
@@ -46,21 +47,22 @@ async function onUpgrade() {
   closeMoreMenu();
 
   let update;
+  info("正在检查更新…", 10000);
   try {
     update = await updater.checkUpdate();
-  } catch (e) {
-    error("检查更新失败：" + (e instanceof Error ? e.message : String(e)));
-    return;
+  } catch {
+    return; // 网络异常等错误由 UpgradeProgressHost 面板展示
   }
   if (!update) {
     info("已是最新版本");
     return;
   }
 
+  const currentVersion = await getVersion();
   const confirmed = await showConfirm({
     title: "发现新版本",
-    message: `检测到新版本 v${update.version}，是否下载并安装？`,
-    confirmText: "下载并安装",
+    message: `v${currentVersion}  →  v${update.version}\n\n是否下载并安装新版本？`,
+    confirmText: "升级",
   });
   if (!confirmed) return;
 

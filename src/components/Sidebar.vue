@@ -24,6 +24,7 @@ const initialCategoryId = ref<string>("default");
 const newCategoryName = ref("");
 const showAddCategory = ref(false);
 const contextMenu = ref<{ host: Host; x: number; y: number } | null>(null);
+const collapsed = ref(false);
 
 const hostsByCategory = computed(() => {
   const map = new Map<string, Host[]>();
@@ -130,9 +131,12 @@ function handleAddCategory() {
 </script>
 
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar" :class="{ collapsed }">
     <div class="sidebar-header">
-      <h2>主机</h2>
+      <h2 v-if="!collapsed">主机</h2>
+      <button class="collapse-btn" :title="collapsed ? '展开侧边栏' : '折叠侧边栏'" @click="collapsed = !collapsed">
+        <span class="collapse-icon">{{ collapsed ? "▶" : "◀" }}</span>
+      </button>
     </div>
 
     <div class="category-list">
@@ -177,6 +181,7 @@ function handleAddCategory() {
           @keyup.enter="handleAddCategory"
         />
         <button @click="handleAddCategory">添加</button>
+        <button class="cancel-btn" @click="showAddCategory = false">取消</button>
       </div>
       <button v-else class="add-category-btn" @click="showAddCategory = true">
         + 新建分类
@@ -217,17 +222,39 @@ function handleAddCategory() {
 <style scoped>
 .sidebar {
   width: 240px;
-  min-width: 200px;
   height: 100%;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+.sidebar.collapsed {
+  width: 48px;
+  min-width: 48px;
+}
+.sidebar.collapsed .sidebar-header {
+  padding: 12px 0;
+  justify-content: center;
+}
+.sidebar.collapsed .category-list,
+.sidebar.collapsed .sidebar-footer {
+  opacity: 0;
+  pointer-events: none;
+}
+.category-list,
+.sidebar-footer {
+  transition: opacity 0.1s ease;
 }
 
 .sidebar-header {
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 .sidebar-header h2 {
   font-size: 14px;
@@ -235,6 +262,24 @@ function handleAddCategory() {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-secondary);
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.collapse-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+.collapse-icon {
+  font-size: 10px;
 }
 
 .category-list {
@@ -336,10 +381,26 @@ function handleAddCategory() {
 }
 .add-category-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 .add-category-form input {
   flex: 1;
+  min-width: 100%;
+  order: -1;
+}
+.cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 0;
+  margin-left: auto;
+}
+.cancel-btn:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
 }
 
 .context-menu-overlay {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useTabs } from "../composables/useTabs";
+import { useConnections } from "../composables/useConnections";
 
 const emit = defineEmits<{
   closeConnection: [connectionId: string];
@@ -8,6 +9,7 @@ const emit = defineEmits<{
 }>();
 
 const { tabs, activeTabId, setActiveTab, closeTab, renameTab, reorderTab } = useTabs();
+const { connectionStates } = useConnections();
 
 const contextMenu = ref<{ tabId: string; x: number; y: number } | null>(null);
 const renamingTabId = ref<string | null>(null);
@@ -129,6 +131,7 @@ function onMouseUp() {
       @click="setActiveTab(tab.id)"
       @contextmenu.prevent="onContextMenu(tab.id, $event)"
     >
+      <span v-if="connectionStates[tab.connectionId] === 'disconnected'" class="tab-dot" title="连接已断开"></span>
       <span v-if="renamingTabId !== tab.id" class="tab-title">{{ tab.title }}</span>
       <input
         v-else
@@ -197,6 +200,14 @@ function onMouseUp() {
 }
 .tab.drag-over {
   border-left: 2px solid var(--accent);
+}
+
+.tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f44336;
+  flex-shrink: 0;
 }
 
 .tab-title {

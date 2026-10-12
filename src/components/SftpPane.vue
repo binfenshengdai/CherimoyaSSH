@@ -319,7 +319,8 @@ function formatTime(ts: number): string {
 
     <!-- 文件列表 -->
     <div class="sftp-file-list">
-      <div v-if="loading" class="sftp-loading">加载中...</div>
+      <div v-if="sessionId === 'pending'" class="sftp-loading">正在连接…</div>
+      <div v-else-if="loading" class="sftp-loading">加载中...</div>
       <div v-else-if="files.length === 0" class="sftp-empty">目录为空</div>
       <div
         v-else
